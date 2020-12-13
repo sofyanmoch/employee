@@ -1,0 +1,68 @@
+{
+  "version": 2,
+  "projects": {
+    "employee": {
+      "root": "apps/employee",
+      "sourceRoot": "apps/employee/src",
+      "projectType": "application",
+      "prefix": "employee",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/employee",
+            "main": "apps/employee/src/main.ts",
+            "tsConfig": "apps/employee/tsconfig.app.json",
+            "assets": [
+              "apps/employee/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/employee/src/environments/environment.ts",
+                  "with": "apps/employee/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "employee:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/employee/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/employee"
+          ],
+          "options": {
+            "jestConfig": "apps/employee/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/nest"
+  },
+  "defaultProject": "employee"
+}
