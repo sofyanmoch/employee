@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
 import {Model} from 'mongoose'
 import {InjectModel} from '@nestjs/mongoose'
@@ -9,9 +10,22 @@ export class EmployeeService {
 
     constructor(@InjectModel('Employee') private readonly employeeModel: Model<Employee>) { }
 
-    async getEmployee(offset,limit): Promise<Employee[]> {
-        const employee = await this.employeeModel.find().skip(Number(offset)).limit(Number(limit)).exec()
-        return employee
+    async getCount() {
+        const dataTotal = await this.employeeModel.find().exec();
+        // console.log(dataTotal.length)
+        return dataTotal.length
+    }
+
+    async getEmployee(page,offset,limit,totalPage) {
+        const employee = await this.employeeModel.find().skip(offset).limit(Number(limit)).exec()
+        return {
+            employee , 
+            totalData: employee.length, 
+            limit: limit, 
+            offset: offset,
+            page: page,
+            totalPage: totalPage
+        }
     }
 
     async getEmployees(employeeID): Promise<Employee> {

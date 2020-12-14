@@ -8,13 +8,23 @@ export class EmployeeController {
 
     constructor(private employeeService: EmployeeService) {}
 
+
+
     @Get('/')
     async getEmployee(@Res() res, @Req() req) {
         const limit = !req.query.limit? '5' : req.query.limit
-        const offset = !req.query.offset? '0' : req.query.offset
+        const page = !req.query.page? 1 : parseInt(req.query.page)
+        const offset = page === 1 ? 0:(page-1)*limit
+        
+        // get total data
+        const dataTotal = await this.employeeService.getCount()
+        // console.log(dataTotal)
 
-        const employee = await this.employeeService.getEmployee(offset,limit)
+        const totalPage = Math.ceil(dataTotal/limit)
+
+        const employee = await this.employeeService.getEmployee(page,offset,limit,totalPage)
         return res.status(HttpStatus.OK).json(employee)
+        
     }
 
     @Get('/:employeeID')
