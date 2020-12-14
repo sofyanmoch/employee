@@ -11,7 +11,9 @@ export class EmployeeController {
     @Get('/')
     async getEmployee(@Res() res, @Req() req) {
         const limit = !req.query.limit? '5' : req.query.limit
-        const employee = await this.employeeService.getEmployee(limit)
+        const offset = !req.query.offset? '0' : req.query.offset
+
+        const employee = await this.employeeService.getEmployee(offset,limit)
         return res.status(HttpStatus.OK).json(employee)
     }
 

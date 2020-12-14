@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {Model} from 'mongoose'
 import {InjectModel} from '@nestjs/mongoose'
-import { Employee } from '../../interfaces/employee.interface'
+import { Employee } from '../../models/interfaces/employee.interface'
 import {CreateEmployeeDTO} from '../../dto/create-employee.dto'
 
 @Injectable()
@@ -9,8 +9,8 @@ export class EmployeeService {
 
     constructor(@InjectModel('Employee') private readonly employeeModel: Model<Employee>) { }
 
-    async getEmployee(limit): Promise<Employee[]> {
-        const employee = await this.employeeModel.find().limit(Number(limit)).exec()
+    async getEmployee(offset,limit): Promise<Employee[]> {
+        const employee = await this.employeeModel.find().skip(Number(offset)).limit(Number(limit)).exec()
         return employee
     }
 
