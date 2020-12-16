@@ -9,9 +9,20 @@ export class AttendanceService {
 
     constructor(@InjectModel('Attendance') private readonly attendanceModel: Model<Attendance>) { }
 
-    async getAttendance(): Promise<Attendance[]> {
-        const attendance = await this.attendanceModel.find().exec()
-        return attendance;
+    async getCount() {
+        const dataTotal = await this.attendanceModel.find().exec()
+        return dataTotal.length
+    }
+
+    async getAttendance(limit,offset,totalPage) {
+        const attendance = await this.attendanceModel.find().skip(offset).limit(Number(limit)).exec()
+        return {
+            attendance,
+            totalData: attendance.length,
+            limit: limit,
+            offset: offset,
+            totalPage: totalPage
+        };
     }
 
     async getAttendances(idAttendance): Promise<Attendance>{

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Put, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Put, Req, Res } from '@nestjs/common';
 import {AttendanceService} from '../../services/attendance/attendance.service'
 import {CreateAttendanceDTO} from '../../dto/create-attendance.dto'
 import {ValidateObjectId} from '../../shared/validate-object-id.pipes'
@@ -9,8 +9,18 @@ export class AttendanceController {
     constructor(private attendanceService: AttendanceService) {}
 
     @Get('/')
-    async getAttendance(@Res() res) {
-        const attendance = await this.attendanceService.getAttendance()
+    async getAttendance(@Res() res, @Req() req) {
+        const limit = !req.query.limit? '5' : req.query.limit
+        const page = !req.query.page? 1 : parseInt(req.query.page)
+        const offset = page === 1 ? 0:(page-1)*limit
+
+        // get total data
+        const dataTotal = await this.attendanceService.getCount()
+        // console.log(dataTotal)
+
+        const totalPage = Math.ceil(dataTotal/limit)
+
+        const attendance = await this.attendanceService.getAttendance(limit,offset,totalPage)
         return res.status(HttpStatus.OK).json(attendance)
     }
 

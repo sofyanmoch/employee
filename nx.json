@@ -34,6 +34,13 @@
     },
     "employee-api": {
       "tags": []
+    },
+    "employee-app": {
+      "tags": []
+    },
+    "employee-app-e2e": {
+      "tags": [],
+      "implicitDependencies": ["employee-app"]
     }
   }
 }
