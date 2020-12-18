@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { Link, Route, RouteComponentProps } from 'react-router-dom';
 import axios from 'axios';
 
+// component
+import Navbar from '../shared/data-table/Navbar'
 
 //prime react
 import classNames from 'classnames';
@@ -66,8 +68,10 @@ export default class Home extends React.Component<RouteComponentProps, IState> {
         return (
             
             <React.Fragment>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => alert(rowData._id)} />
+                <div className="">
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-3" onClick={() => alert(rowData._id)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => this.deleteEmployee(rowData._id)} />
+                </div>
             </React.Fragment>
         );
     }
@@ -94,8 +98,6 @@ export default class Home extends React.Component<RouteComponentProps, IState> {
                      <Column header="Action" body={this.actionBodyTemplate}></Column>
                     </DataTable>
                 </div>
-
-                
             </div>
         //    <div>
                
